@@ -28,6 +28,7 @@ import ModelDetailContent from "./ModelDetailContent";
 import ModelDetailMetadata from "./ModelDetailMetadata";
 import ModelResultOverview from "./ModelResultOverview";
 import ResultGraphs from "./ResultGraphs";
+import VerificationMethodTable from "./VerificationMethodTable";
 
 // if working on the appearance/layout set globals.DevMode=true
 // to avoid loading the models and tests over the network every time;
@@ -62,6 +63,24 @@ const styles = (theme) => ({
 });
 
 function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <Typography
+            component="div"
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && <Box p={3}>{children}</Box>}
+        </Typography>
+    );
+}
+
+
+function RunPanel(props) {
     const { children, value, index, ...other } = props;
 
     return (
@@ -305,6 +324,11 @@ class ModelDetail extends React.Component {
         // 1 : Validations
         // 2 : Validations -> Results
         // 3 : Validations -> Figures
+        // 4 : Verification
+        // 5 : Verification -> Results
+        // 6 : Verification -> Documentation
+        // 7 : Verification -> Reusability
+        // 8 : Verification -> Robustness
         if (newValue === 1) {
             newValue = 2
         }
@@ -447,7 +471,36 @@ class ModelDetail extends React.Component {
                                             borderBottom: "medium solid", borderBottomColor: Theme.activeTabColor
                                         }} />}
 
-                                    {this.state.tabValue >= 1 && <Tab label="Figures" className={classes.default_subTabStyle}
+                                    {this.state.tabValue >= 1  && <Tab label="Figures" className={classes.default_subTabStyle}
+                                        style={{
+                                            borderTop: "medium solid", borderTopColor: Theme.activeTabColor,
+                                            borderBottom: "medium solid", borderBottomColor: Theme.activeTabColor
+                                        }} />}
+
+                                    <Tab label={this.state.tabValue >= 1
+                                        ? <div>Verification<DoubleArrowIcon style={{ verticalAlign: 'bottom', opacity: 1 }} /></div>
+                                        : "Verification"}
+                                        className={this.state.tabValue >= 1 ? classes.active_tabStyle : classes.default_tabStyle} />
+    
+                                    {this.state.tabValue >= 1 && <Tab label="Results" className={classes.default_subTabStyle}
+                                        style={{
+                                            borderTop: "medium solid", borderTopColor: Theme.activeTabColor,
+                                            borderBottom: "medium solid", borderBottomColor: Theme.activeTabColor
+                                        }} />}
+    
+                                    {this.state.tabValue >= 1 && <Tab label="Documentation" className={classes.default_subTabStyle}
+                                        style={{
+                                            borderTop: "medium solid", borderTopColor: Theme.activeTabColor,
+                                            borderBottom: "medium solid", borderBottomColor: Theme.activeTabColor
+                                        }} />}
+
+                                    {this.state.tabValue >= 1 && <Tab label="Reusability" className={classes.default_subTabStyle}
+                                        style={{
+                                            borderTop: "medium solid", borderTopColor: Theme.activeTabColor,
+                                            borderBottom: "medium solid", borderBottomColor: Theme.activeTabColor
+                                        }} />}
+
+                                    {this.state.tabValue >= 1 && <Tab label="Robustness" className={classes.default_subTabStyle}
                                         style={{
                                             borderTop: "medium solid", borderTopColor: Theme.activeTabColor,
                                             borderBottom: "medium solid", borderBottomColor: Theme.activeTabColor
@@ -526,6 +579,26 @@ class ModelDetail extends React.Component {
                                     results={this.state.results}
                                     loadingResult={this.state.loadingResult}
                                 />
+                            </TabPanel>
+                            <TabPanel value={this.state.tabValue} index={4}>
+                            </TabPanel>
+                            <TabPanel value={this.state.tabValue} index={5}>
+                                Verification results TODO
+                            </TabPanel>
+                            <TabPanel value={this.state.tabValue} index={6}>
+                                Verification Documentation TODO
+                            </TabPanel>
+                            <TabPanel value={this.state.tabValue} index={7}>
+                                Verification Reusability TODO
+                                <VerificationMethodTable
+                                    id={this.props.modelData.id}
+                                    results={this.state.results}>
+
+                                </VerificationMethodTable>
+                            </TabPanel>
+                            <TabPanel value={this.state.tabValue} index={8}>
+                                Verification Robustness TODO
+                                <RunPanel></RunPanel>
                             </TabPanel>
                         </Grid>
                     </Grid>
