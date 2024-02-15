@@ -580,7 +580,7 @@ class ModelDetail extends React.Component {
                                     loadingResult={this.state.loadingResult}
                                 />
                             </TabPanel>
-                            <TabPanel value={this.state.tabValue} index={4}>
+                            {/* <TabPanel value={this.state.tabValue} index={4}>
                             </TabPanel>
                             <TabPanel value={this.state.tabValue} index={5}>
                                 Verification results TODO
@@ -599,7 +599,7 @@ class ModelDetail extends React.Component {
                             <TabPanel value={this.state.tabValue} index={8}>
                                 Verification Robustness TODO
                                 <RunPanel></RunPanel>
-                            </TabPanel>
+                            </TabPanel> */}
                         </Grid>
                     </Grid>
                 </DialogContent>
