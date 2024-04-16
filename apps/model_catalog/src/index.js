@@ -8,6 +8,7 @@ import ValidationFramework from "./ValidationFramework";
 
 function renderApp(auth) {
     datastore.auth = auth;
+    datastore.auth.token = process.env.REACT_APP_TOKEN
     ReactDOM.render(
         <ContextMainProvider>
             <SnackbarProvider maxSnack={3}>
