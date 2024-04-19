@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import initAuth from './auth';
+// import initAuth from './auth';
+import initAuth from './auth2';
 import { datastore } from "./datastore";
 import { ContextMainProvider } from "./ContextMain";
 import { SnackbarProvider } from "notistack";

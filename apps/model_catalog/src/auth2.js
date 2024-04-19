@@ -1,22 +1,29 @@
-import Keycloak from 'keycloak-js';
+import {Log, OidcClient} from 'oidc-client-ts';
 
 
 // We start by configuring the Keycloak javascript client
 // It needs to know your app id in order to authenticate users for it
-const keycloak = Keycloak({
-    url: 'https://iam.ebrains.eu/auth',
+const client = OidcClient({
+    authority: 'https://iam.ebrains.eu/auth',
     realm: 'hbp',
-    clientId: 'model-catalog',
-    'public-client': true,
-    'confidential-port': 0,
-    // redirectUri: 'http://duckduckgo.com',
+    client_id: 'model-catalog',
+    redirect_uri: 'http://duckduckgo.com',
+    // 'public-client': true,
+    // 'confidential-port': 0,
+    post_logout_redirect_uri: 'http://duckduckgo.com',
+    response_type: "code",
+    // scope: "openid email roles",
+
+    response_mode: "fragment",
+
+    filterProtocolClaims: true
 });
 const YOUR_APP_SCOPES = 'team email profile';   // full list at https://iam.ebrains.eu/auth/realms/hbp/.well-known/openid-configuration
 
 
 export default function initAuth(main) {
-    console.log('DOM content is loaded, initialising Keycloak client...');
-    keycloak
+    console.log('DOM content is loaded, initialising OIDC client...');
+    client
         //.init({ flow: 'standard', pkceMethod: 'S256' })
         .init({ flow: 'implicit' })
         .then(() => checkAuth(main))
@@ -24,11 +31,11 @@ export default function initAuth(main) {
 }
 
 function checkAuth(main) {
-    console.log('Keycloak client is initialised, verifying authentication...');
+    console.log('OIDC client is initialised, verifying authentication...');
 
     // Is the user anonymous or authenticated?
-    const isAuthenticated = keycloak.authenticated;
-    const isAnonymous = !keycloak.authenticated;
+    const isAuthenticated = client.authenticated;
+    const isAnonymous = !client.authenticated;
     // Is this app a standalone app, a framed app or a delegate?
     const isParent = (window.opener == null);
     const isIframe = (window !== window.parent);
@@ -46,7 +53,7 @@ function checkAuth(main) {
     const getCurrentURL = () => new URL(window.location);
     const closeCurrentTab = () => window.close();
 
-    const login = (scopes) => keycloak.login({ scope: scopes });
+    const login = (scopes) => client.login({ scope: scopes });
 
     // A standalone app should simply login if the user is not authenticated
     // and do its business logic otherwise
@@ -58,7 +65,7 @@ function checkAuth(main) {
         }
         if (isAuthenticated) {
             console.log('...which is authenticated, starting app with authentication');
-            return main(keycloak);
+            return main(client);
         }
     }
 
