@@ -8,14 +8,20 @@ import ValidationFramework from "./ValidationFramework";
 
 function renderApp(auth) {
     datastore.auth = auth;
-    ReactDOM.render(
+    ReactDOM.createRoot(document.getElementById("root")).render(
         <ContextMainProvider>
             <SnackbarProvider maxSnack={3}>
                 <ValidationFramework auth={auth} />
             </SnackbarProvider>
-        </ContextMainProvider>,
-        document.getElementById('root')
+        </ContextMainProvider>
     );
 };
 
-window.addEventListener('DOMContentLoaded', () => initAuth(renderApp));
+// window.addEventListener("DOMContentLoaded", () => initAuth(renderApp));
+
+// -- for development, comment out the previous line and uncomment the following ones
+
+const auth = {
+  token: "token here"
+};
+window.addEventListener('DOMContentLoaded', () => renderApp(auth));
